@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func SendToDingtalk(targetUrl string, accessTokens string, keyword string, proxyUrl string) {
+func SendToDingtalk(targetUrl string, accessTokens string, keyword string, proxyUrl string, notifyIfNotFound bool) {
 	sendJson := `
 {
 	"msgtype": "markdown",
@@ -26,46 +26,51 @@ func SendToDingtalk(targetUrl string, accessTokens string, keyword string, proxy
 }`
 	expInfo := ""
 	var sendData string
+	var flag bool
 	if len(core.GetInfo()) == 0 {
+		flag = false
 		sendData = fmt.Sprintf(sendJson, keyword, keyword, "> 今日无新exp呀   \n---   \n")
 	} else {
+		flag = true
 		for _, v := range core.GetInfo() {
 			expInfo += fmt.Sprintf("> [%s](%s)   \n---   \n", v.Title, v.TargetUrl)
 		}
 		sendData = fmt.Sprintf(sendJson, keyword, keyword, expInfo)
 	}
-	for _, accessToken := range strings.Split(accessTokens, ",") {
-		if accessToken == "" {
-			continue
-		}
-		body := bytes.NewBuffer([]byte(sendData))
-
-		dingtalkUrl := targetUrl + accessToken
-		httpClient := &http.Client{}
-		if proxyUrl != "" {
-			proxy := func(_ *http.Request) (*url.URL, error) {
-				return url.Parse(proxyUrl)
+	if flag || notifyIfNotFound {
+		for _, accessToken := range strings.Split(accessTokens, ",") {
+			if accessToken == "" {
+				continue
 			}
-			httpTransport := &http.Transport{
-				Proxy: proxy,
-			}
-			httpClient = &http.Client{
-				Transport: httpTransport,
-			}
-		}
-		req, err := http.NewRequest("POST", dingtalkUrl, body)
-		if err != nil {
-			log.Fatal(err)
-			// handle error
-		}
-		req.Header.Set("Content-Type", "application/json")
+			body := bytes.NewBuffer([]byte(sendData))
 
-		resp, err := httpClient.Do(req)
-		if err != nil {
-			log.Fatal(err)
-			// handle error
-		}
+			dingtalkUrl := targetUrl + accessToken
+			httpClient := &http.Client{}
+			if proxyUrl != "" {
+				proxy := func(_ *http.Request) (*url.URL, error) {
+					return url.Parse(proxyUrl)
+				}
+				httpTransport := &http.Transport{
+					Proxy: proxy,
+				}
+				httpClient = &http.Client{
+					Transport: httpTransport,
+				}
+			}
+			req, err := http.NewRequest("POST", dingtalkUrl, body)
+			if err != nil {
+				log.Fatal(err)
+				// handle error
+			}
+			req.Header.Set("Content-Type", "application/json")
 
-		defer resp.Body.Close()
+			resp, err := httpClient.Do(req)
+			if err != nil {
+				log.Fatal(err)
+				// handle error
+			}
+
+			defer resp.Body.Close()
+		}
 	}
 }

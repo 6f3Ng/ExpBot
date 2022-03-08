@@ -17,6 +17,7 @@ targetUrl    = https://oapi.dingtalk.com/robot/send?access_token= # 钉钉告警
 accessTokens = aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb # 钉钉告警的access_token，使用逗号分隔多个token
 keyword      = 新EXP推送 # 钉钉告警的关键字配置
 proxyUrl     = http://127.0.0.1:8080 # 是否通过代理告警，支持http和socks，若留空则不通过代理
+notifyIfNotFound = false # 未发现时是否告警，若未配置则默认告警
 ```
 usage
 ---

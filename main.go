@@ -38,8 +38,9 @@ func main() {
 	dingtalkAccessTokens := cfg.Section("dingtalk").Key("accessTokens").String()
 	dingtalkKeyword := cfg.Section("dingtalk").Key("keyword").String()
 	dingtalkProxyUrl := cfg.Section("dingtalk").Key("proxyUrl").String()
+	notifyIfNotFound := cfg.Section("dingtalk").Key("notifyIfNotFound").MustBool(true)
 
-	sender.SendToDingtalk(dingtalkUrl, dingtalkAccessTokens, dingtalkKeyword, dingtalkProxyUrl)
+	sender.SendToDingtalk(dingtalkUrl, dingtalkAccessTokens, dingtalkKeyword, dingtalkProxyUrl, notifyIfNotFound)
 	// for _, v := range core.GetInfo() {
 	// 	fmt.Println(v.Title, v.TargetUrl)
 	// }
