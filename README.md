@@ -12,6 +12,11 @@ targetUrl = https://sploitus.com/exploit?id=EDB-ID: # 监控地址
 proxyUrl  = http://127.0.0.1:8080 # 是否通过代理访问，支持http和socks，若留空则不通过代理
 startId   = 50679 # 起始EDB-ID
 
+[exploitdb] # 监控项
+targetUrl = https://www.exploit-db.com/exploits/ # 监控地址
+proxyUrl  = http://127.0.0.1:8080 # 是否通过代理访问，支持http和socks，若留空则不通过代理
+startId   = 50828 # 起始ID
+
 [dingtalk] # 钉钉告警
 targetUrl    = https://oapi.dingtalk.com/robot/send?access_token= # 钉钉告警地址
 accessTokens = aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb # 钉钉告警的access_token，使用逗号分隔多个token

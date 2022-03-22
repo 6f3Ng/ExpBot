@@ -20,17 +20,36 @@ func main() {
 		fmt.Println("文件读取错误", err)
 		os.Exit(1)
 	}
-	targetUrl := cfg.Section("sploitus").Key("targetUrl").String()
-	startId := cfg.Section("sploitus").Key("startId").String()
-	proxyUrl := cfg.Section("sploitus").Key("proxyUrl").String()
-	for {
-		statusCode := core.GetEXP(targetUrl, startId, proxyUrl)
-		if statusCode != 200 {
-			cfg.Section("sploitus").Key("startId").SetValue(startId)
-			break
-		} else {
-			newId, _ := strconv.Atoi(startId)
-			startId = strconv.Itoa(newId + 1)
+	for _, section := range cfg.Sections() {
+		switch section.Name() {
+		case "sploitus":
+			targetUrl := cfg.Section("sploitus").Key("targetUrl").String()
+			startId := cfg.Section("sploitus").Key("startId").String()
+			proxyUrl := cfg.Section("sploitus").Key("proxyUrl").String()
+			for {
+				statusCode := core.GetEXPFormSploitus(targetUrl, startId, proxyUrl)
+				if statusCode != 200 {
+					cfg.Section("sploitus").Key("startId").SetValue(startId)
+					break
+				} else {
+					newId, _ := strconv.Atoi(startId)
+					startId = strconv.Itoa(newId + 1)
+				}
+			}
+		case "exploitdb":
+			targetUrl := cfg.Section("exploitdb").Key("targetUrl").String()
+			startId := cfg.Section("exploitdb").Key("startId").String()
+			proxyUrl := cfg.Section("exploitdb").Key("proxyUrl").String()
+			for {
+				statusCode := core.GetEXPFormSploitus(targetUrl, startId, proxyUrl)
+				if statusCode != 200 {
+					cfg.Section("exploitdb").Key("startId").SetValue(startId)
+					break
+				} else {
+					newId, _ := strconv.Atoi(startId)
+					startId = strconv.Itoa(newId + 1)
+				}
+			}
 		}
 	}
 
